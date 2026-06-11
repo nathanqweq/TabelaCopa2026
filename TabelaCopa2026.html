@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa do Mundo 2026 — Tabela Oficial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+  :root {
+    --verde:#00A550; --verde-dark:#007A3A; --ouro:#F5C518;
+    --azul-mid:#0052CC; --vermelho:#EF4444;
+    --cinza-bg:#0A0E1A; --cinza-card:#111827; --cinza-borda:#1F2937;
+    --cinza-texto:#9CA3AF; --texto:#F1F5F9; --grupo-header:#161D2E;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--cinza-bg);color:var(--texto);min-height:100vh}
+
+  /* ── HERO ── */
+  header{background:linear-gradient(135deg,#03071E 0%,#031C4A 40%,#054A1E 100%);border-bottom:3px solid var(--ouro);padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden}
+  header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,165,80,.18) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 50% 0%,rgba(245,197,24,.12) 0%,transparent 60%);pointer-events:none}
+  .hero-badge{display:inline-block;background:var(--ouro);color:#000;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:2px;margin-bottom:16px}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,96px);letter-spacing:4px;line-height:1;background:linear-gradient(to right,var(--ouro),#FFF,var(--verde));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+  .hero-sub{font-size:14px;color:var(--cinza-texto);letter-spacing:3px;text-transform:uppercase;margin-bottom:24px}
+  .hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+  .hero-stat-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--ouro);line-height:1}
+  .hero-stat-label{font-size:11px;color:var(--cinza-texto);letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+
+  /* ── NAV ── */
+  nav{background:var(--cinza-card);border-bottom:1px solid var(--cinza-borda);display:flex;overflow-x:auto;scrollbar-width:none;justify-content:center;position:sticky;top:0;z-index:100}
+  nav::-webkit-scrollbar{display:none}
+  nav button{background:none;border:none;color:var(--cinza-texto);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:16px 22px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+  nav button:hover{color:var(--texto)}
+  nav button.active{color:var(--ouro);border-bottom-color:var(--ouro)}
+
+  .container{max-width:1100px;margin:0 auto;padding:36px 16px 64px}
+  .tab-section{display:none}
+  .tab-section.active{display:block}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--ouro);margin-bottom:28px;display:flex;align-items:center;gap:12px}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--cinza-borda)}
+
+  /* ── BANDEIRAS ── */
+  .flag-sm{width:26px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .flag-md{width:34px;height:24px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .flag-ph{display:inline-block;width:26px;height:18px;background:#1F2937;border-radius:2px;flex-shrink:0}
+
+  /* ── GRUPOS — estilo lista limpa ── */
+  .grupos-lista{display:flex;flex-direction:column;gap:20px}
+
+  .grupo-bloco{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:10px;overflow:hidden}
+
+  .grupo-titulo{
+    display:grid;
+    grid-template-columns:160px repeat(8,1fr) 110px;
+    align-items:center;
+    padding:10px 20px;
+    background:var(--grupo-header);
+    border-bottom:2px solid var(--verde);
+    font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cinza-texto);font-weight:500;
+  }
+  .grupo-titulo .gt-nome{
+    font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--ouro);
+    display:flex;align-items:center;gap:10px;
+  }
+  .grupo-titulo span{text-align:center}
+  .grupo-titulo .ul-label{text-align:center;font-size:9px;line-height:1.3}
+
+  .time-row{
+    display:grid;
+    grid-template-columns:160px repeat(8,1fr) 110px;
+    align-items:center;
+    padding:0 20px;
+    border-bottom:1px solid var(--cinza-borda);
+    transition:background .15s;
+    min-height:48px;
+  }
+  .time-row:last-child{border-bottom:none}
+  .time-row:hover{background:rgba(255,255,255,.03)}
+  .time-row.classifica{background:rgba(0,165,80,.06)}
+  .time-row.classifica:hover{background:rgba(0,165,80,.1)}
+  .time-row.terceiro{background:rgba(245,197,24,.04)}
+  .time-row.terceiro:hover{background:rgba(245,197,24,.08)}
+
+  /* barra colorida à esquerda */
+  .time-row.classifica .time-info{border-left:3px solid var(--verde);padding-left:8px;margin-left:-3px}
+  .time-row.terceiro .time-info{border-left:3px solid var(--ouro);padding-left:8px;margin-left:-3px}
+
+  .time-info{display:flex;align-items:center;gap:9px;padding:10px 0}
+  .pos{font-size:12px;color:var(--cinza-texto);min-width:14px;text-align:right;flex-shrink:0}
+  .time-nome{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .cel{text-align:center;font-size:13px;color:var(--cinza-texto)}
+  .cel.pts{font-weight:700;color:var(--texto);font-size:14px}
+
+  .ultimos{display:flex;align-items:center;justify-content:center;gap:4px}
+  .res-dot{width:16px;height:16px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .res-dot.v{background:var(--verde);color:#000}
+  .res-dot.e{background:#4B5563;color:#fff}
+  .res-dot.d{background:var(--vermelho);color:#fff}
+  .res-dot.n{background:#1F2937;color:var(--cinza-texto)}
+
+  /* ── LEGENDA ── */
+  .legenda{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+  .leg-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--cinza-texto)}
+  .leg-cor{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+
+  /* ── REGRAS ── */
+  .regras-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .regra-card{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:22px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+  .regra-card:hover{transform:translateY(-2px);border-color:var(--verde)}
+  .regra-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .regra-card.verde::before{background:var(--verde)}
+  .regra-card.ouro::before{background:var(--ouro)}
+  .regra-card.azul::before{background:var(--azul-mid)}
+  .regra-card.vermelho::before{background:var(--vermelho)}
+  .regra-icone{font-size:28px;margin-bottom:12px;display:block}
+  .regra-titulo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--texto);margin-bottom:8px}
+  .regra-desc{font-size:13px;line-height:1.7;color:var(--cinza-texto)}
+  .regra-detalhe{margin-top:10px;background:rgba(255,255,255,.04);border-radius:6px;padding:9px 13px;font-size:12px;color:var(--texto);line-height:1.6}
+
+  /* ── FORMATO ── */
+  .formato-flow{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+  .formato-etapa{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:20px 24px;text-align:center;min-width:130px;flex:1;max-width:190px;position:relative}
+  .formato-etapa+.formato-etapa::before{content:'→';position:absolute;left:-14px;top:50%;transform:translateY(-50%);color:var(--ouro);font-size:18px}
+  .formato-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--verde);line-height:1}
+  .formato-label{font-size:11px;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  .formato-sub{font-size:12px;color:var(--texto);margin-top:6px;line-height:1.4}
+  .info-box{background:linear-gradient(135deg,rgba(0,165,80,.1) 0%,rgba(0,61,165,.1) 100%);border:1px solid var(--verde);border-radius:8px;padding:20px 24px;margin-top:24px}
+  .info-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--ouro);margin-bottom:10px}
+  .info-box p{font-size:13px;color:var(--cinza-texto);line-height:1.7}
+  .criterios-list{list-style:none;margin-top:12px}
+  .criterios-list li{font-size:13px;color:var(--cinza-texto);padding:6px 0;border-bottom:1px solid var(--cinza-borda);display:flex;align-items:flex-start;gap:10px}
+  .criterios-list li:last-child{border-bottom:none}
+  .crit-num{background:var(--verde);color:#000;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+  /* ── PLACARES ── */
+  .placar-aviso{background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.3);border-radius:8px;padding:12px 18px;font-size:13px;color:var(--ouro);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+  .placar-grupo-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--ouro);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+  .jogo-row{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .jogo-time{flex:1;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;min-width:90px}
+  .jogo-time.dir{justify-content:flex-end}
+  .jogo-inputs{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .jogo-inputs input{width:46px;height:34px;text-align:center;background:rgba(255,255,255,.08);border:1px solid var(--cinza-borda);border-radius:6px;color:var(--texto);font-size:18px;font-weight:700;font-family:'Bebas Neue',sans-serif;outline:none;transition:border-color .2s}
+  .jogo-inputs input:focus{border-color:var(--verde)}
+  .jogo-sep{font-size:14px;color:var(--cinza-texto);font-weight:700}
+  .btn-salvar{background:var(--verde);color:#000;border:none;border-radius:6px;padding:11px 26px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:20px;transition:background .2s}
+  .btn-salvar:hover{background:var(--verde-dark);color:#fff}
+  .btn-limpar{background:transparent;color:var(--vermelho);border:1px solid var(--vermelho);border-radius:6px;padding:11px 20px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:20px;margin-left:12px;transition:background .2s}
+  .btn-limpar:hover{background:rgba(239,68,68,.1)}
+  .salvo-toast{display:none;position:fixed;bottom:24px;right:24px;background:var(--verde);color:#000;font-weight:700;font-size:14px;padding:12px 22px;border-radius:8px;z-index:999;animation:fadeup .3s ease}
+  @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  footer{text-align:center;padding:24px;font-size:12px;color:var(--cinza-texto);border-top:1px solid var(--cinza-borda)}
+
+  @media(max-width:700px){
+    .grupo-titulo,.time-row{grid-template-columns:140px repeat(7,1fr);font-size:12px;padding:0 10px}
+    .grupo-titulo .ul-label,.cel.ult{display:none}
+    .time-nome{font-size:12px}
+    .formato-flow{flex-direction:column;align-items:center}
+    .formato-etapa+.formato-etapa::before{content:'↓';left:50%;top:-14px;transform:translateX(-50%)}
+    .jogo-row{flex-wrap:wrap}
+    .jogo-time{min-width:70px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero-badge">⚽ Edição Histórica</div>
+  <h1>Copa do Mundo 2026</h1>
+  <p class="hero-sub">EUA · México · Canadá &nbsp;|&nbsp; 11 Jun – 19 Jul</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">48</div><div class="hero-stat-label">Seleções</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">12</div><div class="hero-stat-label">Grupos</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">104</div><div class="hero-stat-label">Jogos</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">39</div><div class="hero-stat-label">Dias</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Países-sede</div></div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('grupos',this)">Grupos</button>
+  <button onclick="showTab('formato',this)">Formato</button>
+  <button onclick="showTab('regras',this)">Novas Regras</button>
+  <button onclick="showTab('placares',this)">Meus Placares</button>
+</nav>
+
+<!-- ══ GRUPOS ══ -->
+<div class="tab-section active container" id="tab-grupos">
+  <div class="section-title">Classificação</div>
+  <div class="grupos-lista" id="grupos-lista"></div>
+  <div class="legenda">
+    <div class="leg-item"><div class="leg-cor" style="background:var(--verde)"></div>Classificado direto (1º e 2º)</div>
+    <div class="leg-item"><div class="leg-cor" style="background:var(--ouro)"></div>Disputam vaga (melhor 3º)</div>
+  </div>
+</div>
+
+<!-- ══ FORMATO ══ -->
+<div class="tab-section container" id="tab-formato">
+  <div class="section-title">Novo Formato</div>
+  <div class="formato-flow">
+    <div class="formato-etapa"><div class="formato-num">48</div><div class="formato-label">Seleções</div><div class="formato-sub">12 grupos de 4 times</div></div>
+    <div class="formato-etapa"><div class="formato-num">32</div><div class="formato-label">Classificadas</div><div class="formato-sub">2 por grupo + 8 melhores 3ºs</div></div>
+    <div class="formato-etapa"><div class="formato-num">16</div><div class="formato-label">Avos de Final</div><div class="formato-sub">Fase nova — antes das oitavas</div></div>
+    <div class="formato-etapa"><div class="formato-num">8</div><div class="formato-label">Oitavas</div><div class="formato-sub">Mata-mata clássico</div></div>
+    <div class="formato-etapa"><div class="formato-num">1</div><div class="formato-label">Campeão</div><div class="formato-sub">Final — MetLife Stadium, NJ</div></div>
+  </div>
+  <div class="info-box">
+    <h3>⚠️ Regra dos Melhores Terceiros Colocados</h3>
+    <p>Para completar as 32 vagas do mata-mata, os <strong>8 melhores terceiros colocados</strong> entre os 12 grupos avançam. Critérios de desempate:</p>
+    <ul class="criterios-list">
+      <li><span class="crit-num">1</span>Maior pontuação na fase de grupos</li>
+      <li><span class="crit-num">2</span>Melhor saldo de gols</li>
+      <li><span class="crit-num">3</span>Maior número de gols marcados</li>
+      <li><span class="crit-num">4</span>Ranking de fair play (menos cartões)</li>
+      <li><span class="crit-num">5</span>Sorteio (último recurso)</li>
+    </ul>
+  </div>
+  <div style="margin-top:32px">
+    <div class="section-title">Datas-chave</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px">
+      <div style="background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:16px 18px">
+        <div style="font-size:10px;color:var(--verde);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Abertura</div>
+        <div style="font-weight:600;display:flex;align-items:center;gap:8px"><img src="https://flagsapi.com/MX/flat/32.png" class="flag-sm"> 11 Jun 2026</div>
+        <div style="font-size:12px;color:var(--cinza-texto);margin-top:4px">México × África do Sul — Azteca</div>
+      </div>
+      <div style="background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:16px 18px">
+        <div style="font-size:10px;color:var(--verde);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Brasil estreia</div>
+        <div style="font-weight:600;display:flex;align-items:center;gap:8px"><img src="https://flagsapi.com/BR/flat/32.png" class="flag-sm"> 13 Jun 2026</div>
+        <div style="font-size:12px;color:var(--cinza-texto);margin-top:4px">Brasil × Marrocos — Grupo C</div>
+      </div>
+      <div style="background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:16px 18px">
+        <div style="font-size:10px;color:var(--verde);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Fim Fase de Grupos</div>
+        <div style="font-weight:600">📅 27 Jun 2026</div>
+        <div style="font-size:12px;color:var(--cinza-texto);margin-top:4px">72 partidas — 3 jogos por seleção</div>
+      </div>
+      <div style="background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:16px 18px">
+        <div style="font-size:10px;color:var(--ouro);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Final</div>
+        <div style="font-weight:600;display:flex;align-items:center;gap:8px"><img src="https://flagsapi.com/US/flat/32.png" class="flag-sm"> 19 Jul 2026</div>
+        <div style="font-size:12px;color:var(--cinza-texto);margin-top:4px">MetLife Stadium — East Rutherford, NJ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REGRAS ══ -->
+<div class="tab-section container" id="tab-regras">
+  <div class="section-title">Novas Regras 2026</div>
+  <div class="regras-grid">
+    <div class="regra-card verde"><span class="regra-icone">⏱️</span><div class="regra-titulo">Contagem Regressiva Anti-Cera</div><div class="regra-desc">O árbitro inicia uma contagem de 5 segundos quando um jogador demora para cobrar lateral ou tiro de meta.</div><div class="regra-detalhe">⚡ Se ultrapassado: posse revertida ao adversário.</div></div>
+    <div class="regra-card vermelho"><span class="regra-icone">🚩</span><div class="regra-titulo">Lei Vini Jr.</div><div class="regra-desc">Cobrir a boca para proferir ofensas racistas, homofóbicas ou discriminatórias resulta em cartão vermelho direto.</div><div class="regra-detalhe">📌 Aprovada após episódio Vini Jr. × Prestianni (fev/2026).</div></div>
+    <div class="regra-card ouro"><span class="regra-icone">🔄</span><div class="regra-titulo">Substituições Cronometradas</div><div class="regra-desc">O substituído tem 10 segundos para sair após a placa ser levantada.</div><div class="regra-detalhe">⚡ Se exceder: substituto aguarda 1 min — equipe fica com um a menos.</div></div>
+    <div class="regra-card azul"><span class="regra-icone">🏥</span><div class="regra-titulo">Atendimento Médico</div><div class="regra-desc">Jogadores atendidos ficam 1 minuto fora após reinício da partida.</div><div class="regra-detalhe">📌 Exceções: goleiros, concussões e lesões graves.</div></div>
+    <div class="regra-card verde"><span class="regra-icone">📺</span><div class="regra-titulo">VAR Reforçado</div><div class="regra-desc">Câmeras adicionais e IA para análise automática de impedimentos com menor tempo de revisão.</div><div class="regra-detalhe">⚡ Árbitros de vídeo com maior poder de intervenção.</div></div>
+    <div class="regra-card ouro"><span class="regra-icone">💧</span><div class="regra-titulo">Intervalos de Hidratação</div><div class="regra-desc">Em calor extremo, pausas de hidratação podem ser concedidas pelo árbitro.</div><div class="regra-detalhe">📌 103 dos 104 jogos garantem 3+ dias de intervalo entre partidas.</div></div>
+    <div class="regra-card azul"><span class="regra-icone">🏆</span><div class="regra-titulo">Nova Fase: 16-avos de Final</div><div class="regra-desc">Fase eliminatória inédita antes das oitavas — Rodada de 32 — com os 32 classificados.</div><div class="regra-detalhe">⚡ Finalista disputará 8 jogos no total (antes eram 7).</div></div>
+    <div class="regra-card vermelho"><span class="regra-icone">👥</span><div class="regra-titulo">26 Jogadores</div><div class="regra-desc">Cada seleção inscreve até 26 jogadores, com lista divulgada até 2 de junho de 2026.</div><div class="regra-detalhe">📌 Aumento em relação aos 23 anteriores — mais flexibilidade tática.</div></div>
+  </div>
+</div>
+
+<!-- ══ PLACARES ══ -->
+<div class="tab-section container" id="tab-placares">
+  <div class="section-title">Meus Placares</div>
+  <div class="placar-aviso">💾 Placares salvos no navegador — disponíveis ao recarregar a página.</div>
+  <div id="placares-container"></div>
+  <div>
+    <button class="btn-salvar" onclick="salvarPlacares()">💾 Salvar Placares</button>
+    <button class="btn-limpar" onclick="limparPlacares()">🗑️ Limpar Tudo</button>
+  </div>
+</div>
+
+<footer>Copa do Mundo FIFA 2026 &nbsp;·&nbsp; Sorteio oficial dezembro/2025 &nbsp;·&nbsp; Bandeiras: flagsapi.com &nbsp;·&nbsp; Página informativa não oficial</footer>
+<div class="salvo-toast" id="toast">✓ Placares salvos!</div>
+
+<script>
+// ── DADOS (confirmados pelas imagens) ──────────────
+const G = [
+  {l:'A', t:[{c:'MX',n:'México'},{c:'ZA',n:'África do Sul'},{c:'KR',n:'Rep. da Coreia'},{c:'CZ',n:'Tchéquia'}]},
+  {l:'B', t:[{c:'CA',n:'Canadá'},{c:'BA',n:'Bósnia e Herz.'},{c:'QA',n:'Catar'},{c:'CH',n:'Suíça'}]},
+  {l:'C', t:[{c:'BR',n:'Brasil'},{c:'MA',n:'Marrocos'},{c:'HT',n:'Haiti'},{c:'GB-SCT',n:'Escócia'}]},
+  {l:'D', t:[{c:'US',n:'Estados Unidos'},{c:'PY',n:'Paraguai'},{c:'AU',n:'Austrália'},{c:'TR',n:'Turquia'}]},
+  {l:'E', t:[{c:'DE',n:'Alemanha'},{c:'CW',n:'Curaçao'},{c:'CI',n:'Costa do Marfim'},{c:'EC',n:'Equador'}]},
+  {l:'F', t:[{c:'NL',n:'Holanda'},{c:'JP',n:'Japão'},{c:'SE',n:'Suécia'},{c:'TN',n:'Tunísia'}]},
+  {l:'G', t:[{c:'BE',n:'Bélgica'},{c:'EG',n:'Egito'},{c:'IR',n:'Irã'},{c:'NZ',n:'Nova Zelândia'}]},
+  {l:'H', t:[{c:'ES',n:'Espanha'},{c:'CV',n:'Cabo Verde'},{c:'SA',n:'Arábia Saudita'},{c:'UY',n:'Uruguai'}]},
+  {l:'I', t:[{c:'FR',n:'França'},{c:'SN',n:'Senegal'},{c:'IQ',n:'Iraque'},{c:'NO',n:'Noruega'}]},
+  {l:'J', t:[{c:'AR',n:'Argentina'},{c:'DZ',n:'Argélia'},{c:'AT',n:'Áustria'},{c:'JO',n:'Jordânia'}]},
+  {l:'K', t:[{c:'PT',n:'Portugal'},{c:'CD',n:'Rep. D. Congo'},{c:'UZ',n:'Uzbequistão'},{c:'CO',n:'Colômbia'}]},
+  {l:'L', t:[{c:'GB-ENG',n:'Inglaterra'},{c:'HR',n:'Croácia'},{c:'GH',n:'Gana'},{c:'PA',n:'Panamá'}]},
+];
+
+function flagUrl(c,s){
+  if(!c||c==='__')return'';
+  return`https://flagsapi.com/${c}/flat/${s}.png`;
+}
+function flagImg(c,cls){
+  if(!c||c==='__')return`<span class="flag-ph"></span>`;
+  return`<img src="${flagUrl(c,32)}" class="${cls}" alt="" onerror="this.style.opacity='.3'">`;
+}
+
+function jogos(t){return[[t[0],t[1]],[t[2],t[3]],[t[0],t[2]],[t[1],t[3]],[t[0],t[3]],[t[1],t[2]]]}
+
+let PL = JSON.parse(localStorage.getItem('copa2026_placares')||'{}');
+
+function calcGrupo(l){
+  const g=G.find(x=>x.l===l),ts=g.t;
+  const s={};ts.forEach(t=>s[t.n]={pts:0,j:0,v:0,e:0,d:0,gm:0,gc:0,sg:0,hist:[]});
+  jogos(ts).forEach(([ta,tb],i)=>{
+    const p=PL[l+'_'+i];
+    if(p&&p.a!==''&&p.b!==''){
+      const a=+p.a,b=+p.b;
+      s[ta.n].j++;s[tb.n].j++;
+      s[ta.n].gm+=a;s[ta.n].gc+=b;s[ta.n].sg+=a-b;
+      s[tb.n].gm+=b;s[tb.n].gc+=a;s[tb.n].sg+=b-a;
+      if(a>b){
+        s[ta.n].pts+=3;s[ta.n].v++;s[tb.n].d++;
+        s[ta.n].hist.push('v');s[tb.n].hist.push('d');
+      }else if(b>a){
+        s[tb.n].pts+=3;s[tb.n].v++;s[ta.n].d++;
+        s[tb.n].hist.push('v');s[ta.n].hist.push('d');
+      }else{
+        s[ta.n].pts++;s[tb.n].pts++;s[ta.n].e++;s[tb.n].e++;
+        s[ta.n].hist.push('e');s[tb.n].hist.push('e');
+      }
+    }
+  });
+  return ts.slice().sort((a,b)=>{
+    const sa=s[a.n],sb=s[b.n];
+    if(sb.pts!==sa.pts)return sb.pts-sa.pts;
+    if(sb.sg!==sa.sg)return sb.sg-sa.sg;
+    return sb.gm-sa.gm;
+  }).map(t=>({...t,...s[t.n]}));
+}
+
+function dotHtml(hist){
+  const dots=[];
+  for(let i=0;i<5;i++){
+    const r=hist[hist.length-5+i];
+    if(!r||i>=5-hist.length&&hist.length<5){
+      dots.push(`<span class="res-dot n">–</span>`);
+    }else{
+      const lbl=r==='v'?'V':r==='e'?'E':'D';
+      dots.push(`<span class="res-dot ${r}">${lbl}</span>`);
+    }
+  }
+  return`<div class="ultimos">${dots.join('')}</div>`;
+}
+
+function renderGrupos(){
+  const lista=document.getElementById('grupos-lista');
+  lista.innerHTML='';
+  G.forEach(g=>{
+    const rank=calcGrupo(g.l);
+    const bloco=document.createElement('div');
+    bloco.className='grupo-bloco';
+
+    const rows=rank.map((it,i)=>{
+      const cls=i<2?'classifica':i===2?'terceiro':'';
+      const sg=it.sg>0?'+'+it.sg:it.sg;
+      return`<div class="time-row ${cls}">
+        <div class="time-info">
+          <span class="pos">${i+1}</span>
+          ${flagImg(it.c,'flag-sm')}
+          <span class="time-nome">${it.n}</span>
+        </div>
+        <span class="cel">${it.j}</span>
+        <span class="cel">${it.v}</span>
+        <span class="cel">${it.e}</span>
+        <span class="cel">${it.d}</span>
+        <span class="cel">${it.gm}</span>
+        <span class="cel">${it.gc}</span>
+        <span class="cel">${sg}</span>
+        <span class="cel pts">${it.pts}</span>
+        <span class="cel ult">${dotHtml(it.hist||[])}</span>
+      </div>`;
+    }).join('');
+
+    bloco.innerHTML=`
+      <div class="grupo-titulo">
+        <div class="gt-nome">Grupo ${g.l}</div>
+        <span>J</span><span>C</span><span>E</span><span>D</span>
+        <span>M</span><span>S</span><span>DG</span><span>Pts</span>
+        <span class="ul-label">Últimos<br>Resultados</span>
+      </div>
+      ${rows}`;
+    lista.appendChild(bloco);
+  });
+}
+
+function renderPlacares(){
+  const c=document.getElementById('placares-container');
+  c.innerHTML='';
+  G.forEach(g=>{
+    const tit=document.createElement('div');
+    tit.className='placar-grupo-title';
+    tit.innerHTML=`Grupo ${g.l}`;
+    c.appendChild(tit);
+    jogos(g.t).forEach(([ta,tb],i)=>{
+      const key=g.l+'_'+i,pv=PL[key]||{a:'',b:''};
+      const row=document.createElement('div');
+      row.className='jogo-row';
+      row.innerHTML=`
+        <div class="jogo-time">${flagImg(ta.c,'flag-md')}<span>${ta.n}</span></div>
+        <div class="jogo-inputs">
+          <input type="number" min="0" max="99" placeholder="-" value="${pv.a}" oninput="upd('${key}','a',this.value)">
+          <span class="jogo-sep">×</span>
+          <input type="number" min="0" max="99" placeholder="-" value="${pv.b}" oninput="upd('${key}','b',this.value)">
+        </div>
+        <div class="jogo-time dir"><span>${tb.n}</span>${flagImg(tb.c,'flag-md')}</div>`;
+      c.appendChild(row);
+    });
+  });
+}
+
+function upd(key,side,val){
+  if(!PL[key])PL[key]={a:'',b:''};
+  PL[key][side]=val;
+  renderGrupos();
+}
+function salvarPlacares(){
+  localStorage.setItem('copa2026_placares',JSON.stringify(PL));
+  const t=document.getElementById('toast');t.style.display='block';
+  setTimeout(()=>t.style.display='none',2500);
+}
+function limparPlacares(){
+  if(!confirm('Apagar todos os placares?'))return;
+  PL={};localStorage.removeItem('copa2026_placares');
+  renderPlacares();renderGrupos();
+}
+function showTab(id,btn){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='placares')renderPlacares();
+}
+renderGrupos();
+</script>
+</body>
+</html>
