@@ -39,7 +39,7 @@
   .section-title::after{content:'';flex:1;height:1px;background:var(--cinza-borda)}
 
   /* ── BANDEIRAS ── */
-  .flag-sm{width:26px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .flag-sm{width:22px;height:15px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.5)}
   .flag-md{width:34px;height:24px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.5)}
   .flag-ph{display:inline-block;width:26px;height:18px;background:#1F2937;border-radius:2px;flex-shrink:0}
 
@@ -160,6 +160,52 @@
     .jogo-row{flex-wrap:wrap}
     .jogo-time{min-width:70px}
   }
+
+  /* ── MATA-MATA ── */
+  .mm-aviso{background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.3);border-radius:8px;padding:12px 18px;font-size:13px;color:var(--ouro);margin-bottom:28px;display:flex;align-items:center;gap:10px}
+  .mm-bracket{padding-bottom:32px;width:100%}
+
+  /* grid espelhado: esquerda(4 colunas) | centro(final) | direita(4 colunas) */
+  .mm-grid{display:grid;grid-template-columns:repeat(4,1fr) 110px repeat(4,1fr);width:100%;gap:0;align-items:stretch}
+
+  .mm-col{display:flex;flex-direction:column}
+  .mm-col-title{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:1px;color:var(--ouro);text-align:center;padding:6px 2px 10px;text-transform:uppercase;border-bottom:1px solid var(--cinza-borda);white-space:nowrap}
+  .mm-col-title.center{font-size:13px;letter-spacing:1.5px}
+  .mm-col-slots{display:flex;flex-direction:column;justify-content:space-around;flex:1;padding:8px 3px;gap:4px}
+  .mm-col-slots.center{padding:8px 5px;justify-content:center}
+
+  /* direita: times espelhados (placar à esquerda) */
+  .mm-col.right .mm-time{flex-direction:row-reverse;text-align:right}
+  .mm-col.right .mm-time.vencedor::after{left:8px;right:auto}
+  .mm-col.right .mm-placar{margin-left:0;margin-right:auto;padding-right:0;padding-left:14px}
+
+  .mm-jogo{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:5px;overflow:hidden;transition:border-color .2s}
+  .mm-jogo:hover{border-color:var(--verde)}
+  .mm-jogo.final-jogo{border-color:var(--ouro)!important;box-shadow:0 0 20px rgba(245,197,24,.2)}
+
+  .mm-time{display:flex;align-items:center;gap:4px;padding:5px 6px;font-size:10px;font-weight:500;position:relative;transition:background .15s}
+  .mm-time:first-child{border-bottom:1px solid var(--cinza-borda)}
+  .mm-time.vencedor{background:rgba(0,165,80,.13);color:#fff}
+  .mm-time.vencedor::after{content:'✓';position:absolute;right:4px;font-size:9px;color:var(--verde);font-weight:700}
+  .mm-time.perdedor{opacity:.38}
+  .mm-time.tbd{color:var(--cinza-texto);font-style:italic;font-size:11px}
+  .mm-placar{margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--texto);min-width:14px;text-align:center;padding-right:14px}
+  .mm-placar.venc{color:var(--verde)}
+
+  .mm-input-wrap{display:flex;align-items:center;border-top:1px solid var(--cinza-borda);padding:4px 5px;gap:3px;background:rgba(0,0,0,.25)}
+  .mm-inp{width:26px;height:22px;background:rgba(255,255,255,.08);border:1px solid var(--cinza-borda);border-radius:3px;color:var(--texto);font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;text-align:center;outline:none;transition:border-color .2s}
+  .mm-inp:focus{border-color:var(--verde)}
+  .mm-inp-sep{font-size:11px;color:var(--cinza-texto);font-weight:700}
+  .mm-inp-label{font-size:8px;color:var(--cinza-texto);letter-spacing:.5px;text-transform:uppercase;flex:1}
+
+  /* terceiro lugar */
+  .terceiro-box{background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:10px;padding:16px 20px;margin-top:16px;text-align:center}
+  .terceiro-titulo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--cinza-texto);margin-bottom:10px}
+
+  .campeao-box{background:linear-gradient(135deg,rgba(245,197,24,.15),rgba(0,165,80,.1));border:2px solid var(--ouro);border-radius:12px;padding:24px;text-align:center;margin-top:20px}
+  .campeao-titulo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--ouro);margin-bottom:12px}
+  .campeao-time{display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -179,9 +225,10 @@
 
 <nav>
   <button class="active" onclick="showTab('grupos',this)">Grupos</button>
+  <button onclick="showTab('mata',this)">Mata-Mata</button>
+  <button onclick="showTab('placares',this)">Meus Placares</button>
   <button onclick="showTab('formato',this)">Formato</button>
   <button onclick="showTab('regras',this)">Novas Regras</button>
-  <button onclick="showTab('placares',this)">Meus Placares</button>
 </nav>
 
 <!-- ══ GRUPOS ══ -->
@@ -268,7 +315,25 @@
   </div>
 </div>
 
-<footer>Copa do Mundo FIFA 2026 &nbsp;·&nbsp; Bandeiras: flagsapi.com &nbsp;·&nbsp; Página informativa não oficial</footer>
+
+<!-- ══ MATA-MATA ══ -->
+<div class="tab-section" id="tab-mata" style="padding:32px 12px 64px;max-width:100%;margin:0 auto">
+  <div class="section-title">Mata-Mata</div>
+  <div class="mm-aviso">⚡ Chaveamento automático baseado na classificação dos grupos. Preencha os placares para avançar os times.</div>
+  <div class="mm-bracket">
+    <div class="mm-grid" id="mm-grid"></div>
+  </div>
+  <div class="campeao-box" id="campeao-box" style="display:none">
+    <div class="campeao-titulo">🏆 Campeão do Mundo 2026</div>
+    <div class="campeao-time" id="campeao-time"></div>
+  </div>
+  <div class="terceiro-box" id="terceiro-box" style="display:none">
+    <div class="terceiro-titulo">🥉 Disputa de 3º Lugar</div>
+    <div id="terceiro-time"></div>
+  </div>
+</div>
+
+<footer>Copa do Mundo FIFA 2026 &nbsp;·&nbsp; Sorteio oficial dezembro/2025 &nbsp;·&nbsp; Bandeiras: flagsapi.com &nbsp;·&nbsp; Página informativa não oficial</footer>
 <div class="salvo-toast" id="toast">✓ Placares salvos!</div>
 
 <script>
@@ -437,7 +502,193 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
   if(id==='placares')renderPlacares();
+  if(id==='mata')renderMata();
 }
+
+
+// ══════════════════════════════════════════════════
+//  MATA-MATA — layout espelhado, final no centro
+// ══════════════════════════════════════════════════
+
+// Chaveamento: lado A (esq) = jogos 0-7, lado B (dir) = jogos 8-15
+// Estrutura dos 16-avos (r1): 16 jogos
+const R1 = [
+  // LADO A (esquerda) — jogos 0..7
+  {kA:'1A',kB:'2C'},{kA:'1C',kB:'2A'},
+  {kA:'1B',kB:'2D'},{kA:'1D',kB:'2B'},
+  {kA:'1E',kB:'2G'},{kA:'1G',kB:'2E'},
+  {kA:'1F',kB:'2H'},{kA:'1H',kB:'2F'},
+  // LADO B (direita) — jogos 8..15
+  {kA:'1I',kB:'2K'},{kA:'1K',kB:'2I'},
+  {kA:'1J',kB:'2L'},{kA:'1L',kB:'2J'},
+  {kA:'3X1',kB:'3X2'},{kA:'3X3',kB:'3X4'},
+  {kA:'3X5',kB:'3X6'},{kA:'3X7',kB:'3X8'},
+];
+
+let MM = JSON.parse(localStorage.getItem('copa2026_mm')||'{}');
+
+function getMelhores3() {
+  return G.map(g => {
+    const r = calcGrupo(g.l);
+    return r[2] ? {...r[2]} : null;
+  }).filter(Boolean).sort((a,b)=>{
+    if(b.pts!==a.pts) return b.pts-a.pts;
+    if(b.sg!==a.sg)   return b.sg-a.sg;
+    return b.gm-a.gm;
+  });
+}
+
+function getClassifPos(pos) {
+  if(pos.startsWith('3X')) {
+    const idx = parseInt(pos[2])-1;
+    return getMelhores3()[idx] || null;
+  }
+  const tipo = parseInt(pos[0])-1;
+  const grp  = pos[1];
+  const r = calcGrupo(grp);
+  return r[tipo] || null;
+}
+
+function getVencMM(key) {
+  const p = MM[key];
+  if(!p || p.a==='' || p.b==='') return null;
+  return +p.a > +p.b ? 'A' : +p.b > +p.a ? 'B' : null;
+}
+
+// retorna {tA, tB} de qualquer jogo em qualquer fase
+// fase: r1(16), r2(8), r3(4), r4(2=semi), r5(1=final)
+// cada fase reduz pares: r2[i] = venc(r1[i*2]) vs venc(r1[i*2+1]), etc.
+function getPar(fase, idx) {
+  if(fase==='r1') {
+    return { tA: getClassifPos(R1[idx].kA), tB: getClassifPos(R1[idx].kB) };
+  }
+  const prev = 'r'+(parseInt(fase[1])-1);
+  const tA = getVencPar(prev, idx*2);
+  const tB = getVencPar(prev, idx*2+1);
+  return {tA, tB};
+}
+
+function getVencPar(fase, idx) {
+  const {tA, tB} = getPar(fase, idx);
+  const v = getVencMM(fase+'_'+idx);
+  if(!v) return null;
+  return v==='A' ? tA : tB;
+}
+
+function getPerdPar(fase, idx) {
+  const {tA, tB} = getPar(fase, idx);
+  const v = getVencMM(fase+'_'+idx);
+  if(!v) return null;
+  return v==='A' ? tB : tA;
+}
+
+// ── Renderiza um card de jogo ─────────────────────────────────────────────
+function jogoHtml(fase, idx, isRight, isFinal) {
+  const key = fase+'_'+idx;
+  const {tA, tB} = getPar(fase, idx);
+  const pv = MM[key]||{a:'',b:''};
+  const v  = getVencMM(key);
+
+  const nA = tA ? tA.n : '—';
+  const nB = tB ? tB.n : '—';
+  const cA = tA ? tA.c : '__';
+  const cB = tB ? tB.c : '__';
+  const clsA = v==='A'?'vencedor':v==='B'?'perdedor':(!tA?'tbd':'');
+  const clsB = v==='B'?'vencedor':v==='A'?'perdedor':(!tB?'tbd':'');
+  const pclsA = v==='A'?'venc':'';
+  const pclsB = v==='B'?'venc':'';
+  const canInput = !!(tA && tB);
+
+  return `<div class="mm-jogo${isFinal?' final-jogo':''}">
+    <div class="mm-time ${clsA}">
+      ${flagImg(cA,'flag-sm')}
+      <span>${nA}</span>
+      <span class="mm-placar ${pclsA}">${pv.a!==''?pv.a:''}</span>
+    </div>
+    <div class="mm-time ${clsB}">
+      ${flagImg(cB,'flag-sm')}
+      <span>${nB}</span>
+      <span class="mm-placar ${pclsB}">${pv.b!==''?pv.b:''}</span>
+    </div>
+    ${canInput?`<div class="mm-input-wrap">
+      <span class="mm-inp-label">Placar</span>
+      <input class="mm-inp" type="number" min="0" max="99" placeholder="-" value="${pv.a}" oninput="updMM('${key}','a',this.value)">
+      <span class="mm-inp-sep">×</span>
+      <input class="mm-inp" type="number" min="0" max="99" placeholder="-" value="${pv.b}" oninput="updMM('${key}','b',this.value)">
+    </div>`:''}
+  </div>`;
+}
+
+// ── Render principal ──────────────────────────────────────────────────────
+function renderMata() {
+  const grid = document.getElementById('mm-grid');
+  grid.innerHTML = '';
+
+  // ESTRUTURA:
+  // col0=16avos-esq | col1=oitavas-esq | col2=quartas-esq | col3=semi-esq
+  // col4=FINAL(centro)
+  // col5=semi-dir | col6=quartas-dir | col7=oitavas-dir | col8=16avos-dir
+
+  const COLS = [
+    {fase:'r1', lado:'left',  idxs:[0,1,2,3,4,5,6,7],  title:'16-avos'},
+    {fase:'r2', lado:'left',  idxs:[0,1,2,3],            title:'Oitavas'},
+    {fase:'r3', lado:'left',  idxs:[0,1],                title:'Quartas'},
+    {fase:'r4', lado:'left',  idxs:[0],                  title:'Semi'},
+    {fase:'r5', lado:'center',idxs:[0],                  title:'Final'},
+    {fase:'r4', lado:'right', idxs:[1],                  title:'Semi'},
+    {fase:'r3', lado:'right', idxs:[2,3],                title:'Quartas'},
+    {fase:'r2', lado:'right', idxs:[4,5,6,7],            title:'Oitavas'},
+    {fase:'r1', lado:'right', idxs:[8,9,10,11,12,13,14,15], title:'16-avos'},
+  ];
+
+  COLS.forEach(col => {
+    const div = document.createElement('div');
+    div.className = 'mm-col' + (col.lado!=='left'?' '+col.lado:'');
+    div.innerHTML = `<div class="mm-col-title${col.lado==='center'?' center':''}">${col.title}</div>`;
+    const slots = document.createElement('div');
+    slots.className = 'mm-col-slots' + (col.lado==='center'?' center':'');
+    col.idxs.forEach(i => {
+      slots.innerHTML += jogoHtml(col.fase, i, col.lado==='right', col.lado==='center');
+    });
+    div.appendChild(slots);
+    grid.appendChild(div);
+  });
+
+  // Campeão
+  const camp = getVencPar('r5',0);
+  const campBox  = document.getElementById('campeao-box');
+  const campTime = document.getElementById('campeao-time');
+  if(camp) {
+    campBox.style.display='block';
+    campTime.innerHTML = `${flagImg(camp.c,'flag-md')} <span>${camp.n}</span>`;
+  } else {
+    campBox.style.display='none';
+  }
+
+  // 3º lugar — perdedores das semis
+  const p3a = getPerdPar('r4',0);
+  const p3b = getPerdPar('r4',1);
+  const terBox  = document.getElementById('terceiro-box');
+  const terTime = document.getElementById('terceiro-time');
+  if(p3a || p3b) {
+    terBox.style.display='block';
+    terTime.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;gap:16px;font-size:14px;font-weight:600">
+      <span style="display:flex;align-items:center;gap:7px">${flagImg(p3a?p3a.c:'__','flag-sm')} ${p3a?p3a.n:'?'}</span>
+      <span style="color:var(--cinza-texto);font-size:12px">vs</span>
+      <span style="display:flex;align-items:center;gap:7px">${flagImg(p3b?p3b.c:'__','flag-sm')} ${p3b?p3b.n:'?'}</span>
+    </div>`;
+  } else {
+    terBox.style.display='none';
+  }
+}
+
+function updMM(key, side, val) {
+  if(!MM[key]) MM[key]={a:'',b:''};
+  MM[key][side] = val;
+  try{ localStorage.setItem('copa2026_mm', JSON.stringify(MM)); } catch(e){}
+  renderMata();
+}
+
 renderGrupos();
 </script>
 </body>
