@@ -206,6 +206,52 @@
   .campeao-titulo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--ouro);margin-bottom:12px}
   .campeao-time{display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;font-weight:700}
 
+
+  /* ── CARROSSEL DE JOGOS ── */
+  .carrossel-wrap{background:#0D1220;border-bottom:1px solid var(--cinza-borda);padding:0;overflow:hidden;position:relative;user-select:none;cursor:grab}
+  .carrossel-header{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 6px;border-bottom:1px solid var(--cinza-borda)}
+  .carrossel-header-left{display:flex;align-items:center;gap:10px}
+  .carrossel-live-dot{width:8px;height:8px;border-radius:50%;background:var(--vermelho);animation:pulse-dot 1.2s ease-in-out infinite}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+  .carrossel-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cinza-texto);font-weight:600}
+  .carrossel-nav{display:flex;gap:6px}
+  .carrossel-btn{background:rgba(255,255,255,.06);border:1px solid var(--cinza-borda);border-radius:4px;color:var(--cinza-texto);width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
+  .carrossel-btn:hover{background:var(--verde);color:#000;border-color:var(--verde)}
+
+  .carrossel-track-outer{overflow:hidden;width:100%}
+  .carrossel-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;padding:10px 16px 12px;gap:10px}
+
+  .jogo-card{flex-shrink:0;width:168px;background:var(--cinza-card);border:1px solid var(--cinza-borda);border-radius:8px;padding:10px 10px 8px;display:flex;flex-direction:column;gap:6px;position:relative;transition:border-color .2s}
+  .jogo-card:hover{border-color:var(--verde)}
+  .jogo-card.passado{opacity:.6}
+  .jogo-card.hoje{border-color:var(--verde);box-shadow:0 0 10px rgba(0,165,80,.2)}
+  .jogo-card.proximo{border-color:rgba(245,197,24,.4)}
+
+  .jogo-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+  .jogo-rodada{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--cinza-texto)}
+  .jogo-hora{font-size:9px;font-weight:600;color:var(--ouro);letter-spacing:.5px}
+  .jogo-data-label{font-size:9px;color:var(--cinza-texto)}
+
+  .jogo-times{display:flex;flex-direction:column;gap:4px}
+  .jogo-time-row{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500}
+  .jogo-time-row img{width:20px;height:14px;object-fit:cover;border-radius:1px;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.5)}
+  .jogo-time-row .flag-ph-sm{width:20px;height:14px;background:#1F2937;border-radius:1px;flex-shrink:0}
+  .jogo-time-nome{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+  .jogo-placar-val{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--texto);min-width:14px;text-align:center}
+  .jogo-placar-val.venc{color:var(--verde)}
+
+  .jogo-divider{height:1px;background:var(--cinza-borda);margin:0 -10px}
+
+  .jogo-grupo-tag{font-size:9px;color:var(--cinza-texto);letter-spacing:.5px;text-align:right}
+  .jogo-status{position:absolute;top:7px;right:7px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 5px;border-radius:3px}
+  .jogo-status.ao-vivo{background:var(--vermelho);color:#fff}
+  .jogo-status.encerrado{background:#374151;color:var(--cinza-texto)}
+  .jogo-status.em-breve{background:rgba(245,197,24,.15);color:var(--ouro)}
+
+  .carrossel-hoje-ind{display:flex;justify-content:center;gap:5px;padding:4px 0 8px}
+  .ind-dot{width:6px;height:6px;border-radius:50%;background:var(--cinza-borda);cursor:pointer;transition:background .2s}
+  .ind-dot.ativo{background:var(--verde)}
+
 </style>
 </head>
 <body>
@@ -222,6 +268,24 @@
     <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Países-sede</div></div>
   </div>
 </header>
+
+<!-- ══ CARROSSEL DE JOGOS ══ -->
+<div class="carrossel-wrap">
+  <div class="carrossel-header">
+    <div class="carrossel-header-left">
+      <div class="carrossel-live-dot"></div>
+      <span class="carrossel-label">Jogos da Copa 2026</span>
+    </div>
+    <div class="carrossel-nav">
+      <button class="carrossel-btn" onclick="carPrev()">&#8249;</button>
+      <button class="carrossel-btn" onclick="carNext()">&#8250;</button>
+    </div>
+  </div>
+  <div class="carrossel-track-outer">
+    <div class="carrossel-track" id="car-track"></div>
+  </div>
+  <div class="carrossel-hoje-ind" id="car-dots"></div>
+</div>
 
 <nav>
   <button class="active" onclick="showTab('grupos',this)">Grupos</button>
@@ -689,6 +753,336 @@ function updMM(key, side, val) {
   renderMata();
 }
 
+
+// ══════════════════════════════════════════════════
+//  CARROSSEL DE JOGOS
+// ══════════════════════════════════════════════════
+
+// Todos os jogos da Copa 2026 com data/hora (Brasília, UTC-3)
+// formato: [ano, mes-1, dia, hora, min, timeA, codA, timeB, codB, rodada, grupo]
+const JOGOS_COPA = [
+  // ── 1ª RODADA ──
+  [2026,5,11,16,0,'México','MX','África do Sul','ZA','1ª Rodada','A'],
+  [2026,5,11,23,0,'Coreia do Sul','KR','Rep. Tcheca','CZ','1ª Rodada','A'],
+  [2026,5,12,16,0,'Canadá','CA','Bósnia','BA','1ª Rodada','B'],
+  [2026,5,12,22,0,'Estados Unidos','US','Paraguai','PY','1ª Rodada','D'],
+  [2026,5,13,16,0,'Catar','QA','Suíça','CH','1ª Rodada','B'],
+  [2026,5,13,19,0,'Brasil','BR','Marrocos','MA','1ª Rodada','C'],
+  [2026,5,13,22,0,'Haiti','HT','Escócia','GB-SCT','1ª Rodada','C'],
+  [2026,5,14,1,0,'Austrália','AU','Turquia','TR','1ª Rodada','D'],
+  [2026,5,14,14,0,'Alemanha','DE','Curaçao','CW','1ª Rodada','E'],
+  [2026,5,14,17,0,'Holanda','NL','Japão','JP','1ª Rodada','F'],
+  [2026,5,14,20,0,'Costa do Marfim','CI','Equador','EC','1ª Rodada','E'],
+  [2026,5,14,23,0,'Suécia','SE','Tunísia','TN','1ª Rodada','F'],
+  [2026,5,15,13,0,'Espanha','ES','Cabo Verde','CV','1ª Rodada','H'],
+  [2026,5,15,16,0,'Bélgica','BE','Egito','EG','1ª Rodada','G'],
+  [2026,5,15,19,0,'Arábia Saudita','SA','Uruguai','UY','1ª Rodada','H'],
+  [2026,5,15,22,0,'Irã','IR','Nova Zelândia','NZ','1ª Rodada','G'],
+  [2026,5,16,16,0,'França','FR','Senegal','SN','1ª Rodada','I'],
+  [2026,5,16,19,0,'Iraque','IQ','Noruega','NO','1ª Rodada','I'],
+  [2026,5,16,22,0,'Argentina','AR','Argélia','DZ','1ª Rodada','J'],
+  [2026,5,17,1,0,'Áustria','AT','Jordânia','JO','1ª Rodada','J'],
+  [2026,5,17,14,0,'Portugal','PT','RD Congo','CD','1ª Rodada','K'],
+  [2026,5,17,17,0,'Inglaterra','GB-ENG','Croácia','HR','1ª Rodada','L'],
+  [2026,5,17,20,0,'Gana','GH','Panamá','PA','1ª Rodada','L'],
+  [2026,5,17,23,0,'Uzbequistão','UZ','Colômbia','CO','1ª Rodada','K'],
+  // ── 2ª RODADA ──
+  [2026,5,18,13,0,'Rep. Tcheca','CZ','África do Sul','ZA','2ª Rodada','A'],
+  [2026,5,18,16,0,'Suíça','CH','Bósnia','BA','2ª Rodada','B'],
+  [2026,5,18,19,0,'Canadá','CA','Catar','QA','2ª Rodada','B'],
+  [2026,5,18,22,0,'México','MX','Coreia do Sul','KR','2ª Rodada','A'],
+  [2026,5,19,16,0,'Estados Unidos','US','Austrália','AU','2ª Rodada','D'],
+  [2026,5,19,19,0,'Escócia','GB-SCT','Marrocos','MA','2ª Rodada','C'],
+  [2026,5,19,21,30,'Brasil','BR','Haiti','HT','2ª Rodada','C'],
+  [2026,5,20,1,0,'Turquia','TR','Paraguai','PY','2ª Rodada','D'],
+  [2026,5,20,14,0,'Holanda','NL','Suécia','SE','2ª Rodada','F'],
+  [2026,5,20,17,0,'Alemanha','DE','Costa do Marfim','CI','2ª Rodada','E'],
+  [2026,5,20,21,0,'Equador','EC','Curaçao','CW','2ª Rodada','E'],
+  [2026,5,21,1,0,'Tunísia','TN','Japão','JP','2ª Rodada','F'],
+  [2026,5,21,13,0,'Espanha','ES','Arábia Saudita','SA','2ª Rodada','H'],
+  [2026,5,21,16,0,'Bélgica','BE','Irã','IR','2ª Rodada','G'],
+  [2026,5,21,19,0,'Uruguai','UY','Cabo Verde','CV','2ª Rodada','H'],
+  [2026,5,21,22,0,'Nova Zelândia','NZ','Egito','EG','2ª Rodada','G'],
+  [2026,5,22,14,0,'Argentina','AR','Áustria','AT','2ª Rodada','J'],
+  [2026,5,22,18,0,'França','FR','Iraque','IQ','2ª Rodada','I'],
+  [2026,5,22,21,0,'Noruega','NO','Senegal','SN','2ª Rodada','I'],
+  [2026,5,23,0,0,'Jordânia','JO','Argélia','DZ','2ª Rodada','J'],
+  [2026,5,23,14,0,'Portugal','PT','Uzbequistão','UZ','2ª Rodada','K'],
+  [2026,5,23,17,0,'Inglaterra','GB-ENG','Gana','GH','2ª Rodada','L'],
+  [2026,5,23,20,0,'Panamá','PA','Croácia','HR','2ª Rodada','L'],
+  [2026,5,23,23,0,'Colômbia','CO','RD Congo','CD','2ª Rodada','K'],
+  // ── 3ª RODADA ──
+  [2026,5,24,16,0,'Suíça','CH','Canadá','CA','3ª Rodada','B'],
+  [2026,5,24,16,0,'Bósnia','BA','Catar','QA','3ª Rodada','B'],
+  [2026,5,24,19,0,'Marrocos','MA','Haiti','HT','3ª Rodada','C'],
+  [2026,5,24,19,0,'Escócia','GB-SCT','Brasil','BR','3ª Rodada','C'],
+  [2026,5,24,22,0,'África do Sul','ZA','Coreia do Sul','KR','3ª Rodada','A'],
+  [2026,5,24,22,0,'Rep. Tcheca','CZ','México','MX','3ª Rodada','A'],
+  [2026,5,25,17,0,'Equador','EC','Alemanha','DE','3ª Rodada','E'],
+  [2026,5,25,17,0,'Curaçao','CW','Costa do Marfim','CI','3ª Rodada','E'],
+  [2026,5,25,20,0,'Tunísia','TN','Holanda','NL','3ª Rodada','F'],
+  [2026,5,25,20,0,'Japão','JP','Suécia','SE','3ª Rodada','F'],
+  [2026,5,25,23,0,'Turquia','TR','Estados Unidos','US','3ª Rodada','D'],
+  [2026,5,25,23,0,'Paraguai','PY','Austrália','AU','3ª Rodada','D'],
+  [2026,5,26,16,0,'Senegal','SN','Iraque','IQ','3ª Rodada','I'],
+  [2026,5,26,16,0,'Noruega','NO','França','FR','3ª Rodada','I'],
+  [2026,5,26,21,0,'Cabo Verde','CV','Arábia Saudita','SA','3ª Rodada','H'],
+  [2026,5,26,21,0,'Uruguai','UY','Espanha','ES','3ª Rodada','H'],
+  [2026,5,27,0,0,'Egito','EG','Irã','IR','3ª Rodada','G'],
+  [2026,5,27,0,0,'Nova Zelândia','NZ','Bélgica','BE','3ª Rodada','G'],
+  [2026,5,27,18,0,'Croácia','HR','Gana','GH','3ª Rodada','L'],
+  [2026,5,27,18,0,'Panamá','PA','Inglaterra','GB-ENG','3ª Rodada','L'],
+  [2026,5,27,20,30,'RD Congo','CD','Uzbequistão','UZ','3ª Rodada','K'],
+  [2026,5,27,20,30,'Colômbia','CO','Portugal','PT','3ª Rodada','K'],
+  [2026,5,27,23,0,'Jordânia','JO','Argentina','AR','3ª Rodada','J'],
+  [2026,5,27,23,0,'Argélia','DZ','Áustria','AT','3ª Rodada','J'],
+  // ── 2ª FASE (16-avos) ──
+  [2026,6,28,16,0,'2º A','__','2º B','__','16-avos','SF3'],
+  [2026,6,29,14,0,'1º C','__','2º F','__','16-avos','SF9'],
+  [2026,6,29,17,30,'1º E','__','3º ABCDF','__','16-avos','SF1'],
+  [2026,6,29,22,0,'1º F','__','2º C','__','16-avos','SF4'],
+  [2026,6,30,14,0,'2º E','__','2º I','__','16-avos','SF10'],
+  [2026,6,30,18,0,'1º I','__','3º CDFGH','__','16-avos','SF2'],
+  [2026,6,30,22,0,'1º A','__','3º CEFHI','__','16-avos','SF11'],
+  [2026,7,1,13,0,'1º L','__','3º EHIJK','__','16-avos','SF12'],
+  [2026,7,1,17,0,'1º G','__','3º AEHIJ','__','16-avos','SF8'],
+  [2026,7,1,21,0,'1º D','__','3º BEFIJ','__','16-avos','SF7'],
+  [2026,7,2,16,0,'1º H','__','2º J','__','16-avos','SF6'],
+  [2026,7,2,20,0,'2º K','__','2º L','__','16-avos','SF5'],
+  [2026,7,3,0,0,'1º B','__','3º EFGIJ','__','16-avos','SF15'],
+  [2026,7,3,15,0,'2º D','__','2º G','__','16-avos','SF14'],
+  [2026,7,3,19,0,'1º J','__','2º H','__','16-avos','SF13'],
+  [2026,7,3,22,30,'1º K','__','3º DEIJL','__','16-avos','SF16'],
+  // ── OITAVAS ──
+  [2026,7,4,14,0,'Venc. SF3','__','Venc. SF4','__','Oitavas','O2'],
+  [2026,7,4,18,0,'Venc. SF1','__','Venc. SF2','__','Oitavas','O1'],
+  [2026,7,5,17,0,'Venc. SF9','__','Venc. SF10','__','Oitavas','O5'],
+  [2026,7,5,21,0,'Venc. SF11','__','Venc. SF12','__','Oitavas','O6'],
+  [2026,7,6,16,0,'Venc. SF5','__','Venc. SF6','__','Oitavas','O3'],
+  [2026,7,6,21,0,'Venc. SF7','__','Venc. SF8','__','Oitavas','O4'],
+  [2026,7,7,13,0,'Venc. SF13','__','Venc. SF14','__','Oitavas','O7'],
+  [2026,7,7,17,0,'Venc. SF15','__','Venc. SF16','__','Oitavas','O8'],
+  // ── QUARTAS ──
+  [2026,7,9,17,0,'Venc. O1','__','Venc. O2','__','Quartas','Q1'],
+  [2026,7,10,16,0,'Venc. O3','__','Venc. O4','__','Quartas','Q2'],
+  [2026,7,11,18,0,'Venc. O5','__','Venc. O6','__','Quartas','Q3'],
+  [2026,7,11,22,0,'Venc. O7','__','Venc. O8','__','Quartas','Q4'],
+  // ── SEMIS ──
+  [2026,7,14,16,0,'Venc. Q1','__','Venc. Q2','__','Semifinal','S1'],
+  [2026,7,15,16,0,'Venc. Q3','__','Venc. Q4','__','Semifinal','S2'],
+  // ── 3º LUGAR ──
+  [2026,7,18,18,0,'Perd. S1','__','Perd. S2','__','3º Lugar','3L'],
+  // ── FINAL ──
+  [2026,7,19,16,0,'Venc. S1','__','Venc. S2','__','Final','FIN'],
+];
+
+// Converte data do array para Date object (horário Brasília = UTC-3)
+function jogoDate(j) {
+  // Horários no array estão em BRT (UTC-3). Converter para UTC: +3h
+  // Usar Date que lida com overflow de hora automaticamente
+  const d = new Date(j[0], j[1], j[2], j[3], j[4], 0);
+  // d está no timezone LOCAL do browser — somar diferença para BRT
+  // Melhor abordagem: criar timestamp em BRT manualmente
+  // BRT = UTC-3, então UTC = BRT + 3h
+  const utcMs = Date.UTC(j[0], j[1], j[2], j[3] + 3, j[4]);
+  return new Date(utcMs);
+}
+
+function agoraBRT() {
+  // Retorna Date com horário atual ajustado para BRT
+  return new Date();
+}
+
+function statusJogo(j) {
+  const agora = new Date(); // UTC universal
+  const ini = jogoDate(j);  // convertido para UTC corretamente
+  const fim = new Date(ini.getTime() + 105*60000);
+  if(agora >= ini && agora <= fim) return 'ao-vivo';
+  if(agora > fim) return 'encerrado';
+  return 'futuro';
+}
+
+function flagImgCar(code) {
+  if(!code || code==='__') return `<span class="flag-ph-sm"></span>`;
+  return `<img src="https://flagsapi.com/${code}/flat/32.png" alt="" onerror="this.style.opacity='.2'" style="width:20px;height:14px;object-fit:cover;border-radius:1px;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.5)">`;
+}
+
+function fmtDataCar(j) {
+  const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const dias  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const d = new Date(Date.UTC(j[0],j[1],j[2],12,0));
+  return `${dias[d.getUTCDay()]} ${j[2]} ${meses[j[1]]}`;
+}
+
+function fmtHora(j) {
+  const h = String(j[3]).padStart(2,'0');
+  const m = String(j[4]).padStart(2,'0');
+  return `${h}:${m}`;
+}
+
+let carIdx = 0;
+let carTimer = null;
+const CAR_VISIBLE = 8; // cards visíveis por vez (aproximado)
+
+function buildCarrossel() {
+  const track = document.getElementById('car-track');
+  const dots  = document.getElementById('car-dots');
+  if(!track) return;
+  track.innerHTML = '';
+  dots.innerHTML  = '';
+
+  const agora = new Date();
+
+  JOGOS_COPA.forEach((j, i) => {
+    const st = statusJogo(j);
+    const isBrasil = j[5]==='Brasil' || j[7]==='Brasil';
+
+    // Pega placares salvos pelo mesmo key do sistema de grupos
+    // Para fase de grupos usamos chave do PL: GrupoLetra_jogoIdx
+    // Para o carrossel mostramos apenas se tiver placar digitado
+    let placA = '', placB = '', vA = false, vB = false;
+
+    const card = document.createElement('div');
+    let cls = 'jogo-card';
+    if(st==='encerrado') cls += ' passado';
+
+    // Detectar se é hoje (em BRT: UTC-3)
+    const agoraBrt = new Date(Date.now() - 3*3600000);
+    const djBrt = new Date(Date.UTC(j[0],j[1],j[2],12,0));
+    const dhBrt = new Date(Date.UTC(agoraBrt.getUTCFullYear(),agoraBrt.getUTCMonth(),agoraBrt.getUTCDate(),12,0));
+    if(djBrt.getTime()===dhBrt.getTime()) cls += ' hoje';
+
+    if(st==='ao-vivo') cls += ' hoje';
+
+    card.className = cls;
+    if(isBrasil) card.style.borderColor = 'rgba(0,165,80,.6)';
+
+    const statusLabel = st==='ao-vivo'
+      ? `<span class="jogo-status ao-vivo">● AO VIVO</span>`
+      : st==='encerrado'
+        ? `<span class="jogo-status encerrado">Encerrado</span>`
+        : '';
+
+    card.innerHTML = `
+      <div class="jogo-card-top">
+        <span class="jogo-rodada">${j[9]}</span>
+        <span class="jogo-hora">${fmtHora(j)}</span>
+      </div>
+      <div class="jogo-data-label">${fmtDataCar(j)}</div>
+      <div class="jogo-divider"></div>
+      <div class="jogo-times">
+        <div class="jogo-time-row">
+          ${flagImgCar(j[6])}
+          <span class="jogo-time-nome${isBrasil&&j[5]==='Brasil'?' style="color:var(--verde);font-weight:700"':''}">${j[5]}</span>
+          <span class="jogo-placar-val${vA?' venc':''}">${placA}</span>
+        </div>
+        <div class="jogo-time-row">
+          ${flagImgCar(j[8])}
+          <span class="jogo-time-nome${isBrasil&&j[7]==='Brasil'?' style="color:var(--verde);font-weight:700"':''}">${j[7]}</span>
+          <span class="jogo-placar-val${vB?' venc':''}">${placB}</span>
+        </div>
+      </div>
+      <div class="jogo-grupo-tag">Grupo ${j[10]}${statusLabel?` · `:''} ${statusLabel.replace(/<[^>]+>/g,'').trim()}</div>
+    `;
+    track.appendChild(card);
+  });
+
+  // Dots (por página aproximada)
+  const totalPages = Math.ceil(JOGOS_COPA.length / CAR_VISIBLE);
+  for(let p=0; p<totalPages; p++) {
+    const d = document.createElement('div');
+    d.className = 'ind-dot' + (p===0?' ativo':'');
+    d.onclick = () => carGoTo(p * CAR_VISIBLE);
+    dots.appendChild(d);
+  }
+
+  // Posicionar no primeiro jogo futuro ou de hoje
+  const primeiroFuturo = JOGOS_COPA.findIndex(j => {
+    const st = statusJogo(j);
+    return st === 'futuro' || st === 'ao-vivo';
+  });
+  const targetIdx = primeiroFuturo > 0 ? Math.max(0, primeiroFuturo - 1) : 0;
+  carIdx = targetIdx;
+  carApplyPos(false);
+  carStartAuto();
+
+  // Redirecionar scroll do mouse para movimento lateral
+  const wrap = document.querySelector('.carrossel-wrap');
+  // Pausar auto-scroll quando mouse está sobre o carrossel
+  wrap.addEventListener('mouseenter', () => clearInterval(carTimer));
+  wrap.addEventListener('mouseleave', () => carRestartAuto());
+
+  wrap.addEventListener('wheel', function(e) {
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // já é scroll horizontal, deixa passar
+    e.preventDefault();
+    if(e.deltaY > 0) carNext();
+    else carPrev();
+  }, { passive: false });
+
+  // Arrastar com mouse/touch
+  let dragStartX = 0, isDragging = false;
+  wrap.addEventListener('mousedown', e => { isDragging=true; dragStartX=e.clientX; wrap.style.cursor='grabbing'; clearInterval(carTimer); });
+  window.addEventListener('mouseup', e => {
+    if(!isDragging) return;
+    isDragging = false;
+    wrap.style.cursor='grab';
+    const diff = dragStartX - e.clientX;
+    if(Math.abs(diff) > 40) diff > 0 ? carNext() : carPrev();
+    else carRestartAuto();
+  });
+  wrap.addEventListener('touchstart', e => { dragStartX = e.touches[0].clientX; clearInterval(carTimer); }, {passive:true});
+  wrap.addEventListener('touchend', e => {
+    const diff = dragStartX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40) diff > 0 ? carNext() : carPrev();
+    else carRestartAuto();
+  }, {passive:true});
+}
+
+function carCardWidth() {
+  const track = document.getElementById('car-track');
+  if(!track || !track.firstChild) return 178;
+  const card = track.firstChild;
+  return card.offsetWidth + 10; // width + gap
+}
+
+function carApplyPos(animate=true) {
+  const track = document.getElementById('car-track');
+  if(!track) return;
+  if(!animate) track.style.transition = 'none';
+  else track.style.transition = 'transform .4s cubic-bezier(.4,0,.2,1)';
+  const w = carCardWidth();
+  track.style.transform = `translateX(-${carIdx * w}px)`;
+  // atualizar dots
+  const page = Math.floor(carIdx / CAR_VISIBLE);
+  document.querySelectorAll('.ind-dot').forEach((d,i)=>{
+    d.classList.toggle('ativo', i===page);
+  });
+  if(!animate) setTimeout(()=>{ track.style.transition='transform .4s cubic-bezier(.4,0,.2,1)'; },50);
+}
+
+function carGoTo(idx) {
+  carIdx = Math.max(0, Math.min(idx, JOGOS_COPA.length - 1));
+  carApplyPos();
+}
+function carNext() {
+  carIdx = (carIdx + 1) % JOGOS_COPA.length;
+  carApplyPos();
+  carRestartAuto();
+}
+function carPrev() {
+  carIdx = (carIdx - 1 + JOGOS_COPA.length) % JOGOS_COPA.length;
+  carApplyPos();
+  carRestartAuto();
+}
+function carStartAuto() {
+  carTimer = setInterval(carNext, 4000);
+}
+function carRestartAuto() {
+  clearInterval(carTimer);
+  carStartAuto();
+}
+
+buildCarrossel();
 renderGrupos();
 </script>
 </body>
