@@ -260,7 +260,7 @@
 <!-- ══ PLACARES ══ -->
 <div class="tab-section container" id="tab-placares">
   <div class="section-title">Meus Placares</div>
-  <div class="placar-aviso">💾 Placares salvos no navegador — disponíveis ao recarregar a página.</div>
+  <div class="placar-aviso">💾 Salvamento automático ativado — os placares são gravados a cada alteração e persistem ao recarregar a página.</div>
   <div id="placares-container"></div>
   <div>
     <button class="btn-salvar" onclick="salvarPlacares()">💾 Salvar Placares</button>
@@ -411,13 +411,18 @@ function renderPlacares(){
   });
 }
 
+function salvarLS(){
+  try{ localStorage.setItem('copa2026_placares',JSON.stringify(PL)); }
+  catch(e){ console.warn('localStorage indisponivel',e); }
+}
 function upd(key,side,val){
   if(!PL[key])PL[key]={a:'',b:''};
   PL[key][side]=val;
+  salvarLS();
   renderGrupos();
 }
 function salvarPlacares(){
-  localStorage.setItem('copa2026_placares',JSON.stringify(PL));
+  salvarLS();
   const t=document.getElementById('toast');t.style.display='block';
   setTimeout(()=>t.style.display='none',2500);
 }
